@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Test Blog</title>
+        <title>Test Blog - jupyter</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 </head>
 
@@ -16,44 +16,7 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/function-objects.html">Function Objects</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2020-01-27T19:22:34+11:00">
-                Published: Mon 27 January 2020
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/calum-cookson.html">Calum Cookson</a>
-        </address>
-<p>In <a href="/category/code.html">Code</a>.</p>
-<p>tags: <a href="/tag/code.html">code</a> </p>
-</footer><!-- /.post-info --><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">Latex</span>
-
-<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="c1"># twiddler 2</span>
-<span class="c1"># Twiddler</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;$\phi$&#39;</span><span class="p">))</span>
-</pre></div>
-
-
-<p>$\phi$</p>
-<div class="highlight"><pre><span></span>
-</pre></div>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/markdown-annotator.html" rel="bookmark"
-                           title="Permalink to An Annotator for Markdown Files">An Annotator for Markdown Files</a></h1>
-                </header>
-
-                <div class="entry-content">
+                    <h1 class="entry-title"><a href="/markdown-annotator.html">An Annotator for Markdown Files</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2020-01-27T19:22:34+11:00">
                 Published: Mon 27 January 2020
@@ -64,12 +27,46 @@
         </address>
 <p>In <a href="/category/code.html">Code</a>.</p>
 <p>tags: <a href="/tag/code.html">code</a> <a href="/tag/jupyter.html">jupyter</a> <a href="/tag/markdown.html">markdown</a> </p>
-</footer><!-- /.post-info -->                <p>File for adding meta data to start of Markdown File</p>
-                <a class="readmore" href="/markdown-annotator.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
+</footer><!-- /.post-info --><h1>Annotator for Markdown</h1>
+<p>======================</p>
+<h2>Rationale</h2>
+<p>When exporting from Jupyter (.ipynb) to markdown no metadata is added to the file.
+There may be a way to add this to the workflow of nbconvert, but I can't see it.
+Pelican requires Title, date etc. so rather than editing the file direct I wrote a 
+Python script to open the designated files and the metadata.</p>
+<h2>Peculiarities</h2>
+<p>As the file is edited inline and does not checking, if the annotator is run twice for the
+same file it adds the metadata twice</p>
+<h2>Usage:</h2>
+<p>python annotator.py</p>
+<h2>Code</h2>
+<p>'''python
+from datetime import datetime</p>
+<p>articles = {
+    "annotator.md" :
+    {
+        "Title" : "An Annotator for Markdown Files",
+        "Category" : "Code",
+        "Tags" : "code, jupyter, markdown",
+        "Slug": "markdown-annotator",
+        "Authors" : "Calum Cookson",
+        "Summary" : "File for adding meta data to start of Markdown File"
+    }
+}</p>
+<p>def add_meta_data(data, metadata):
+    meta = ""
+    for k,v in metadata.items():
+        meta += k + ":" + v + "\n"
+    return meta + "\n" + data</p>
+<p>for k,v in articles.items():
+    with open(k,"r+") as f:
+        data = f.read()
+        f.seek(0)
+        v['Date'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        f.write(add_meta_data(data, v))
+        f.flush()</p>
+<p>'''</p>                </article>
+            </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
