@@ -10,70 +10,35 @@
         <header id="banner" class="body">
                 <h1><a href="/">Test Blog </a></h1>
                 <nav><ul>
-                    <li><a href="/category/posts.html">posts</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/first-code-post-with diagrams.html">First Code Post With Diagram</a></h1>
+                    <h1 class="entry-title"><a href="/test-with-symbols.html">Test with symbols</a></h1>
 <footer class="post-info">
-        <abbr class="published" title="2020-01-26T22:00:00+11:00">
-                Published: Sun 26 January 2020
+        <abbr class="published" title="2020-01-27T18:04:00+11:00">
+                Published: Mon 27 January 2020
         </abbr>
 
         <address class="vcard author">
                 By                         <a class="url fn" href="/author/calum-cookson.html">Calum Cookson</a>
         </address>
-<p>In <a href="/category/posts.html">posts</a>.</p>
-<p>tags: <a href="/tag/python-firsts.html">python firsts</a> </p>
+<p>In <a href="/category/misc.html">misc</a>.</p>
+
 </footer><!-- /.post-info --><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">Latex</span>
+
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-
-<span class="k">def</span> <span class="nf">logistic</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">r</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">logistic</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">plot_system</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="c1"># Plot the function and the</span>
-    <span class="c1"># y=x diagonal line.</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">logistic</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">),</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="c1"># Recursively apply y=f(x) and plot two lines:</span>
-    <span class="c1"># (x, x) -&gt; (x, y)</span>
-    <span class="c1"># (x, y) -&gt; (y, y)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">x0</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="c1"># Plot the two lines.</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># Plot the positions with increasing</span>
-        <span class="c1"># opacity.</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                <span class="n">alpha</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">y</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;$r=</span><span class="si">{0:.1f}</span><span class="s2">, \, x_0=</span><span class="si">{1:.1f}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">x0</span><span class="p">))</span>
-
-
-<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
-                               <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plot_system</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
-<span class="n">plot_system</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="c1"># twiddler 2</span>
+<span class="c1"># Twiddler</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;$\phi$&#39;</span><span class="p">))</span>
 </pre></div>
 
 
-<p><img alt="svg" src="test_files/test_0_0.svg"></p>
-<p><img alt="svg" src="test_files/test_0_1.svg"></p>
+<p>$\phi$</p>
 <div class="highlight"><pre><span></span>
 </pre></div>                </article>
             </aside><!-- /#featured -->

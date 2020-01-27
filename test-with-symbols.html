@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Test Blog - Calum Cookson</title>
+        <title>Test with symbols</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 </head>
 
@@ -10,13 +10,18 @@
         <header id="banner" class="body">
                 <h1><a href="/">Test Blog </a></h1>
                 <nav><ul>
-                    <li><a href="/category/misc.html">misc</a></li>
+                    <li class="active"><a href="/category/misc.html">misc</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/test-with-symbols.html" rel="bookmark"
+           title="Permalink to Test with symbols">Test with symbols</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/test-with-symbols.html">Test with symbols</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2020-01-27T18:04:00+11:00">
                 Published: Mon 27 January 2020
@@ -27,7 +32,7 @@
         </address>
 <p>In <a href="/category/misc.html">misc</a>.</p>
 
-</footer><!-- /.post-info --><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</footer><!-- /.post-info -->      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">Latex</span>
 
@@ -40,8 +45,11 @@
 
 <p>$\phi$</p>
 <div class="highlight"><pre><span></span>
-</pre></div>                </article>
-            </aside><!-- /#featured -->
+</pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
