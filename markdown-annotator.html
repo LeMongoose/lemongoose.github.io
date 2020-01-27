@@ -45,32 +45,34 @@ same file it adds the metadata twice</p>
 <h2>Usage:</h2>
 <p>python annotator.py</p>
 <h2>Code</h2>
-<p>'''python
-from datetime import datetime</p>
-<p>articles = {
-    "annotator.md" :
-    {
-        "Title" : "An Annotator for Markdown Files",
-        "Category" : "Code",
-        "Tags" : "code, jupyter, markdown",
-        "Slug": "markdown-annotator",
-        "Authors" : "Calum Cookson",
-        "Summary" : "File for adding meta data to start of Markdown File"
-    }
-}</p>
-<p>def add_meta_data(data, metadata):
-    meta = ""
-    for k,v in metadata.items():
-        meta += k + ":" + v + "\n"
-    return meta + "\n" + data</p>
-<p>for k,v in articles.items():
-    with open(k,"r+") as f:
-        data = f.read()
-        f.seek(0)
-        v['Date'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        f.write(add_meta_data(data, v))
-        f.flush()</p>
-<p>'''</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">articles</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;annotator.md&quot;</span> <span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Title&quot;</span> <span class="p">:</span> <span class="s2">&quot;An Annotator for Markdown Files&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Category&quot;</span> <span class="p">:</span> <span class="s2">&quot;Code&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Tags&quot;</span> <span class="p">:</span> <span class="s2">&quot;code, jupyter, markdown&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Slug&quot;</span><span class="p">:</span> <span class="s2">&quot;markdown-annotator&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Authors&quot;</span> <span class="p">:</span> <span class="s2">&quot;Calum Cookson&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Summary&quot;</span> <span class="p">:</span> <span class="s2">&quot;File for adding meta data to start of Markdown File&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">add_meta_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">meta</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">meta</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">data</span>
+
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">articles</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">add_meta_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
     </div><!-- /.entry-content -->
 
   </article>
