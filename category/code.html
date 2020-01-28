@@ -11,14 +11,15 @@
                 <h1><a href="/">Test Blog </a></h1>
                 <nav><ul>
                     <li class="active"><a href="/category/code.html">Code</a></li>
+                    <li><a href="/category/code-licence-license-copyright.html">Code, Licence, License, Copyright</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/function-objects.html">Function Objects</a></h1>
+                    <h1 class="entry-title"><a href="/dynamical-systems-investgation.html">A Python Library For Investigating Dynamical Systems</a></h1>
 <footer class="post-info">
-        <abbr class="published" title="2020-01-27T19:22:34+11:00">
+        <abbr class="published" title="2020-01-27T21:53:35+11:00">
                 Published: Mon 27 January 2020
         </abbr>
 
@@ -27,18 +28,265 @@
         </address>
 <p>In <a href="/category/code.html">Code</a>.</p>
 <p>tags: <a href="/tag/code.html">code</a> </p>
-</footer><!-- /.post-info --><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</footer><!-- /.post-info --><h1>Investigations Of The Iteration Behaviour Of One Dimensional Dynamical Systems</h1>
+<h2>Legal</h2>
+<p>All code on this page is released under the MIT Licence.  </p>
+<h2>Introduction</h2>
+<p>This is the start of an investigation into the behaviour of one dimensional dynamical systems.
+I took the website https://ipython-books.github.io/121-plotting-the-bifurcation-diagram-of-a-chaotic-dynamical-system/
+as the inspiration for the starting point and started adding more general capabilities</p>
+<h2>Structure</h2>
+<p>The project takes the form of a class representing a system, I used the logistic equation:</p>
+<p>$\begin{align<em>} x_{n+1} = rx_{n}(1-x_n)\end{align</em>}$ </p>
+<p><strong>call</strong>(x) : returns $\begin{align<em>} x_{n+1} = rx_{n}(1-x_n)\end{align</em>}$</p>
+<p>diff(x) returns: $\begin{align<em>} df/dx = r-2rx\end{align</em>}$ </p>
+<p>$\begin{align<em>} df/dx \end{align</em>}$ is useful for certain analyses, such as the Lyapunov Exponent ($\lambda$), a measure of the stabiity of the system.</p>
+<p>description() returns formatted information string about the system to be usedin matplotlib graphs etc.</p>
+<p>Define the class <strong>logistic</strong>:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">Latex</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="c1"># twiddler 2</span>
-<span class="c1"># Twiddler</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;$\phi$&#39;</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">logistic</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;object representing the logistic equation {x[n+1] = r * x[n] * (1 - x[n])}</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        r ([]:`number`): the parameter r is the rate of growth in a population sometimes called the             &#39;Malthusian Parameter&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="k">return</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; return f(x)</span>
+<span class="sd">        args: x : Number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; return df(x)/dx &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; return a description in matplotlib &#39;mathtext&#39; &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s1">&#39;$f(x) = rx(1-x)$ : </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter_description</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">parameter_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">r</span><span class="s1">&#39;$ r\leftarrow </span><span class="si">{0}</span><span class="s1"> $&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">r</span><span class="s1">&#39;$ r\leftarrow [</span><span class="si">{0}</span><span class="s1">,...,</span><span class="si">{1}</span><span class="s1">] $&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">}</span>
 </pre></div>
 
 
-<p>$\phi$</p>
+<p>Define a second class <strong>iterate</strong> that allows the creation of a generator to iterate the system of the set number of iterations:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">iterate</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; iterate S=System(x) over &#39;iters&#39; iterations:</span>
+<span class="sd">        x = S(x)</span>
+<span class="sd">        returns: generator</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">S</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
+            <span class="n">ox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">ox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">=</span> <span class="n">max_iter</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">system</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+</pre></div>
+
+
+<p>Define a function to create an iteration plot or <em>cobweb diagram</em>, showing the evolution of the output from initial $x_0 \rightarrow x_n$</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">iteration_plot</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Iteration plot for </span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">f_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">S</span><span class="p">(</span><span class="n">_x</span><span class="p">)</span> <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">f_x</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_n</span> <span class="ow">in</span> <span class="n">_it</span><span class="p">:</span>
+        <span class="n">_x</span> <span class="o">=</span> <span class="n">_n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">_f</span> <span class="o">=</span> <span class="n">_n</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">_x</span><span class="p">,</span> <span class="n">_x</span><span class="p">],</span> <span class="p">[</span><span class="n">_x</span><span class="p">,</span><span class="n">_f</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">_x</span><span class="p">,</span><span class="n">_f</span><span class="p">],</span> <span class="p">[</span><span class="n">_f</span><span class="p">,</span><span class="n">_f</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span> 
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">iteration_plot</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">S</span><span class="p">)(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="svg" src="functions_files/functions_5_0.svg"></p>
+<p>Define a function to create the bifurcation plot of S under various values of $r$.
+As mentioned above, the definition of $logistic$ has the side effect of allowing the parameter to be a vector so:</p>
+<p>$logistic(x) : r \leftarrow [1,2,3,4], x_n \leftarrow 0.01$ yields $x_{n+1}=[0.0099, 0.0198, 0.0297, 0.0396]$</p>
+<p>and:</p>
+<p>$logistic(x) : r \leftarrow [1,2,3,4], x_n \leftarrow [0.0099, 0.0198, 0.0297, 0.0396]$ yields $x_{n+1}=[0.00980199, 0.03881592, 0.08645373, 0.15212736]$</p>
+<p>We can specify which parameter to analyse, for multi parameter models this is useful.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bifurcation_plot</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">parameter_name</span><span class="p">,</span> <span class="n">display_iter</span><span class="o">=.</span><span class="mi">9</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Bifurcation Diagram for </span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Parameter $</span><span class="si">{0}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parameter_name</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_n \leftarrow f(x_{n-1})$&quot;</span><span class="p">)</span>
+    <span class="n">max_iter</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">max_iter</span>
+    <span class="n">_p</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="n">parameter_name</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="n">_it</span><span class="p">:</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">_i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_iter</span> <span class="o">*</span> <span class="n">display_iter</span> <span class="p">):</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_p</span><span class="p">,</span> <span class="n">_i</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;,k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span>
+
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+
+<span class="n">_S</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">bifurcation_plot</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">_S</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="svg" src="functions_files/functions_7_0.svg"></p>
+<p>Define a function that shows the <em>Poincar&eacute; Plot</em> of the system.  The <em>Poincar&eacute; Plot</em> is made by taking an n length window across the output of system and writing the elements of that window as the co-ordinates in a <em>state space</em>.</p>
+<p>The 2D <em>state space</em> of an iterated mapping:</p>
+<p>$x_{n+1} \leftarrow f(x_n)$</p>
+<p>$[x_0,x_1,...,x_n]$</p>
+<p>2D <em>state space</em> of $f(x)$:</p>
+<p>$(x_0,x_1),(x_1,x_2),...,(x_{n-1}, x_n)$</p>
+<p>3D <em>state space</em> of $f(x)$:</p>
+<p>$(x_0,x_1,x_2),(x_1,x_2,x_3),...,(x_{n-2}, x_{n-1}, x_{n})$</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">poincare_plot_2d</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display_iter</span><span class="o">=.</span><span class="mi">9</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;2D $Poincar</span><span class="se">\\</span><span class="s2">&#39;e$ plot for </span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
+    <span class="n">max_iter</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">max_iter</span>
+
+    <span class="n">_</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">_it</span><span class="p">(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+
+<span class="n">S2</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">poincare_plot_2d</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">S2</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+
+<p><img alt="svg" src="functions_files/functions_9_0.svg"></p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">poincare_plot_3d</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display_iter</span><span class="o">=.</span><span class="mi">9</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;3D $Poincar</span><span class="se">\\</span><span class="s2">&#39;e$ plot for </span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
+    <span class="n">max_iter</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">max_iter</span>
+
+    <span class="n">_</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">_it</span><span class="p">(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">return</span> <span class="n">ax</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+
+<span class="n">S2</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">poincare_plot_3d</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">S2</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+
+<p><img alt="svg" src="functions_files/functions_10_0.svg"></p>
+<p>Define a function for estimating the <em>Lyapunov Exponent</em> $(\lambda)$ of the Dynamical System.</p>
+<p>$\lambda(r) = \lim_{n \to \infty} \frac{1}{n} \sum_{i=0}^{n-1} \log\left| \frac{df_r}{dx}\left(x_i^{(r)}\right) \right|$</p>
+<p>Define a function for creating the <em>Lyapunov Exponent</em> estimation for range of system parameters.</p>
+<p>When the <em>Lyapunov Exponent</em> is less than zero the system with that parameter is stable, when the <em>Lyapunov Exponent</em> is greater than zero the system with that parameter is chaotic.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_lyapunov</span><span class="p">(</span><span class="n">_it</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="n">lyapunov</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">xn</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="n">_it</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
+        <span class="n">lyapunov</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">lyapunov</span><span class="o">/</span><span class="n">_it</span><span class="o">.</span><span class="n">max_iter</span>
+
+<span class="k">def</span> <span class="nf">lyapunov_plot</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">parameter_name</span><span class="p">):</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
+
+    <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;$Lyapunov Exponent (</span><span class="se">\\</span><span class="s2">lambda)$ of </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
+    <span class="n">lyapunov</span> <span class="o">=</span> <span class="n">calculate_lyapunov</span><span class="p">(</span><span class="n">_it</span><span class="p">)</span>
+    <span class="n">_p</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="n">parameter_name</span><span class="p">]</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">_p</span><span class="p">[</span><span class="n">lyapunov</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lyapunov</span><span class="p">[</span><span class="n">lyapunov</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">_p</span><span class="p">[</span><span class="n">lyapunov</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lyapunov</span><span class="p">[</span><span class="n">lyapunov</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="n">mn</span><span class="p">,</span><span class="n">mx</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">mn</span><span class="p">,</span><span class="n">mx</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+
+    <span class="k">return</span> <span class="n">ax</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+<span class="n">_S</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">lyapunov_plot</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">_S</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="svg" src="functions_files/functions_12_0.svg"></p>
+<div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+
+<span class="n">_S</span> <span class="o">=</span> <span class="n">logistic</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">bifurcation_plot</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">_S</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">lyapunov_plot</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="n">_S</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+
+
+<p><img alt="svg" src="functions_files/functions_13_0.svg"></p>
+<p>It's interesting to see the relationship between the Bifurcation diagram and the <em>Lyapunov Exponent</em> of the corresponding system.  As noted above the <em>Lyapunov Exponent</em> is strongly related to the stability of the system, when the system becomes chaotic as shown on the bifurcation diagram the <em>Lyapunov Exponent</em> is positive.  The Positive <em>Lyapunov Exponent</em> points are shown in red.</p>
 <div class="highlight"><pre><span></span>
 </pre></div>                </article>
             </aside><!-- /#featured -->
@@ -55,7 +303,7 @@
 
                 <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2020-01-27T19:22:34+11:00">
+        <abbr class="published" title="2020-01-27T21:33:53+11:00">
                 Published: Mon 27 January 2020
         </abbr>
 
