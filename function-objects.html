@@ -42,14 +42,15 @@ I took the website https://ipython-books.github.io/121-plotting-the-bifurcation-
 as the inspiration for the starting point and started adding more general capabilities</p>
 <h2>Structure</h2>
 <p>The project takes the form of a class representing a system, I used the logistic equation:</p>
-<div class="math">$$
-x_{n+1} = rx_{n}(1-x_n)\end{align*}
-$$</div>
-<p><strong>call</strong>(x) : returns <span class="math">\(<div class="math">\begin{align*} x_{n+1} = rx_{n}(1-x_n)\end{align*}</div>\)</span></p>
-<p>diff(x) returns: <span class="math">\(<div class="math">\begin{align*} df/dx = r-2rx\end{align*}</div>\)</span> </p>
-<p><span class="math">\(<div class="math">\begin{align*} df/dx \end{align*}</div>\)</span> is useful for certain analyses, such as the Lyapunov Exponent (<span class="math">\(\lambda\)</span>), a measure of the stabiity of the system.</p>
+<div class="math">$$ x_{n+1} = rx_{n}(1-x_n)$$</div>
+<p><strong>call</strong>(x) : returns </p>
+<div class="math">$$x_{n+1} = rx_{n}(1-x_n)$$</div>
+<p>diff(x) returns: </p>
+<div class="math">$$df/dx = r-2rx$$</div>
+<div class="math">$$df/dx$$</div>
+<p> is useful for certain analyses, such as the Lyapunov Exponent (&lambda;), a measure of the stabiity of the system.</p>
 <p>description() returns formatted information string about the system to be usedin matplotlib graphs etc.</p>
-<p>Define the class <strong>logistic</strong>:</p>
+<p>Define the class <em>logistic</em>:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
