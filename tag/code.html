@@ -37,12 +37,12 @@ I took the website https://ipython-books.github.io/121-plotting-the-bifurcation-
 as the inspiration for the starting point and started adding more general capabilities</p>
 <h2>Structure</h2>
 <p>The project takes the form of a class representing a system, I used the logistic equation:</p>
-<p>$$
+<div class="math">$$
 x_{n+1} = rx_{n}(1-x_n)\end{align*}
-$$ </p>
-<p><strong>call</strong>(x) : returns $\begin{align<em>} x_{n+1} = rx_{n}(1-x_n)\end{align</em>}$</p>
-<p>diff(x) returns: $\begin{align<em>} df/dx = r-2rx\end{align</em>}$ </p>
-<p>$\begin{align<em>} df/dx \end{align</em>}$ is useful for certain analyses, such as the Lyapunov Exponent ($\lambda$), a measure of the stabiity of the system.</p>
+$$</div>
+<p><strong>call</strong>(x) : returns <span class="math">\(<div class="math">\begin{align*} x_{n+1} = rx_{n}(1-x_n)\end{align*}</div>\)</span></p>
+<p>diff(x) returns: <span class="math">\(<div class="math">\begin{align*} df/dx = r-2rx\end{align*}</div>\)</span> </p>
+<p><span class="math">\(<div class="math">\begin{align*} df/dx \end{align*}</div>\)</span> is useful for certain analyses, such as the Lyapunov Exponent (<span class="math">\(\lambda\)</span>), a measure of the stabiity of the system.</p>
 <p>description() returns formatted information string about the system to be usedin matplotlib graphs etc.</p>
 <p>Define the class <strong>logistic</strong>:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -110,7 +110,7 @@ $$ </p>
 </pre></div>
 
 
-<p>Define a function to create an iteration plot or <em>cobweb diagram</em>, showing the evolution of the output from initial $x_0 \rightarrow x_n$</p>
+<p>Define a function to create an iteration plot or <em>cobweb diagram</em>, showing the evolution of the output from initial <span class="math">\(x_0 \rightarrow x_n\)</span></p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">iteration_plot</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Iteration plot for </span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
@@ -141,11 +141,11 @@ $$ </p>
 
 
 <p><img alt="svg" src="functions_files/functions_5_0.svg"></p>
-<p>Define a function to create the bifurcation plot of S under various values of $r$.
-As mentioned above, the definition of $logistic$ has the side effect of allowing the parameter to be a vector so:</p>
-<p>$logistic(x) : r \leftarrow [1,2,3,4], x_n \leftarrow 0.01$ yields $x_{n+1}=[0.0099, 0.0198, 0.0297, 0.0396]$</p>
+<p>Define a function to create the bifurcation plot of S under various values of <span class="math">\(r\)</span>.
+As mentioned above, the definition of <span class="math">\(logistic\)</span> has the side effect of allowing the parameter to be a vector so:</p>
+<p><span class="math">\(logistic(x) : r \leftarrow [1,2,3,4], x_n \leftarrow 0.01\)</span> yields <span class="math">\(x_{n+1}=[0.0099, 0.0198, 0.0297, 0.0396]\)</span></p>
 <p>and:</p>
-<p>$logistic(x) : r \leftarrow [1,2,3,4], x_n \leftarrow [0.0099, 0.0198, 0.0297, 0.0396]$ yields $x_{n+1}=[0.00980199, 0.03881592, 0.08645373, 0.15212736]$</p>
+<p><span class="math">\(logistic(x) : r \leftarrow [1,2,3,4], x_n \leftarrow [0.0099, 0.0198, 0.0297, 0.0396]\)</span> yields <span class="math">\(x_{n+1}=[0.00980199, 0.03881592, 0.08645373, 0.15212736]\)</span></p>
 <p>We can specify which parameter to analyse, for multi parameter models this is useful.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bifurcation_plot</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">parameter_name</span><span class="p">,</span> <span class="n">display_iter</span><span class="o">=.</span><span class="mi">9</span><span class="p">):</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
@@ -178,12 +178,12 @@ As mentioned above, the definition of $logistic$ has the side effect of allowing
 <p><img alt="svg" src="functions_files/functions_7_0.svg"></p>
 <p>Define a function that shows the <em>Poincar&eacute; Plot</em> of the system.  The <em>Poincar&eacute; Plot</em> is made by taking an n length window across the output of system and writing the elements of that window as the co-ordinates in a <em>state space</em>.</p>
 <p>The 2D <em>state space</em> of an iterated mapping:</p>
-<p>$x_{n+1} \leftarrow f(x_n)$</p>
-<p>$[x_0,x_1,...,x_n]$</p>
-<p>2D <em>state space</em> of $f(x)$:</p>
-<p>$(x_0,x_1),(x_1,x_2),...,(x_{n-1}, x_n)$</p>
-<p>3D <em>state space</em> of $f(x)$:</p>
-<p>$(x_0,x_1,x_2),(x_1,x_2,x_3),...,(x_{n-2}, x_{n-1}, x_{n})$</p>
+<p><span class="math">\(x_{n+1} \leftarrow f(x_n)\)</span></p>
+<p><span class="math">\([x_0,x_1,...,x_n]\)</span></p>
+<p>2D <em>state space</em> of <span class="math">\(f(x)\)</span>:</p>
+<p><span class="math">\((x_0,x_1),(x_1,x_2),...,(x_{n-1}, x_n)\)</span></p>
+<p>3D <em>state space</em> of <span class="math">\(f(x)\)</span>:</p>
+<p><span class="math">\((x_0,x_1,x_2),(x_1,x_2,x_3),...,(x_{n-2}, x_{n-1}, x_{n})\)</span></p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">poincare_plot_2d</span><span class="p">(</span><span class="n">_it</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display_iter</span><span class="o">=.</span><span class="mi">9</span><span class="p">):</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">_it</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;2D $Poincar</span><span class="se">\\</span><span class="s2">&#39;e$ plot for </span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">description</span><span class="p">()))</span>
@@ -230,8 +230,8 @@ As mentioned above, the definition of $logistic$ has the side effect of allowing
 
 
 <p><img alt="svg" src="functions_files/functions_10_0.svg"></p>
-<p>Define a function for estimating the <em>Lyapunov Exponent</em> $(\lambda)$ of the Dynamical System.</p>
-<p>$\lambda(r) = \lim_{n \to \infty} \frac{1}{n} \sum_{i=0}^{n-1} \log\left| \frac{df_r}{dx}\left(x_i^{(r)}\right) \right|$</p>
+<p>Define a function for estimating the <em>Lyapunov Exponent</em> <span class="math">\((\lambda)\)</span> of the Dynamical System.</p>
+<p><span class="math">\(\lambda(r) = \lim_{n \to \infty} \frac{1}{n} \sum_{i=0}^{n-1} \log\left| \frac{df_r}{dx}\left(x_i^{(r)}\right) \right|\)</span></p>
 <p>Define a function for creating the <em>Lyapunov Exponent</em> estimation for range of system parameters.</p>
 <p>When the <em>Lyapunov Exponent</em> is less than zero the system with that parameter is stable, when the <em>Lyapunov Exponent</em> is greater than zero the system with that parameter is chaotic.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_lyapunov</span><span class="p">(</span><span class="n">_it</span><span class="p">):</span>
@@ -290,7 +290,71 @@ As mentioned above, the definition of $logistic$ has the side effect of allowing
 <p><img alt="svg" src="functions_files/functions_13_0.svg"></p>
 <p>It's interesting to see the relationship between the Bifurcation diagram and the <em>Lyapunov Exponent</em> of the corresponding system.  As noted above the <em>Lyapunov Exponent</em> is strongly related to the stability of the system, when the system becomes chaotic as shown on the bifurcation diagram the <em>Lyapunov Exponent</em> is positive.  The Positive <em>Lyapunov Exponent</em> points are shown in red.</p>
 <div class="highlight"><pre><span></span>
-</pre></div>                </article>
+</pre></div>
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
