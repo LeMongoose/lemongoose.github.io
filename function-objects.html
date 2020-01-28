@@ -42,7 +42,9 @@ I took the website https://ipython-books.github.io/121-plotting-the-bifurcation-
 as the inspiration for the starting point and started adding more general capabilities</p>
 <h2>Structure</h2>
 <p>The project takes the form of a class representing a system, I used the logistic equation:</p>
-<p>$\begin{align<em>} x_{n+1} = rx_{n}(1-x_n)\end{align</em>}$ </p>
+<p>$$
+x_{n+1} = rx_{n}(1-x_n)\end{align*}
+$$ </p>
 <p><strong>call</strong>(x) : returns $\begin{align<em>} x_{n+1} = rx_{n}(1-x_n)\end{align</em>}$</p>
 <p>diff(x) returns: $\begin{align<em>} df/dx = r-2rx\end{align</em>}$ </p>
 <p>$\begin{align<em>} df/dx \end{align</em>}$ is useful for certain analyses, such as the Lyapunov Exponent ($\lambda$), a measure of the stabiity of the system.</p>
