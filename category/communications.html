@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Test Blog - Communications</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Test Blog </a></h1>
+                <nav><ul>
+                    <li><a href="/category/code.html">Code</a></li>
+                    <li class="active"><a href="/category/communications.html">Communications</a></li>
+                    <li><a href="/category/licence-copyright.html">Licence Copyright</a></li>
+                    <li><a href="/category/topography.html">Topography</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/dynamical-systems.html">Dynamical Systems Communications</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2020-11-02T19:00:17+11:00">
+                Published: Mon 02 November 2020
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/calum-cookson.html">Calum Cookson</a>
+        </address>
+<p>In <a href="/category/communications.html">Communications</a>.</p>
+<p>tags: <a href="/tag/dynamical.html">dynamical</a> <a href="/tag/communications.html">communications</a> </p>
+</footer><!-- /.post-info --><p>The <em>Bernoulli Shift Map</em>
+$$\usepackage{amsmath}</p>
+<p>D(x) = 
+\begin{cases} 
+      2x &amp; 0x\leq x \lt 1/2 \
+      2x-1 &amp; 1/2\leq x\lt 1 </p>
+<p>\end{cases}
+$$</p>
+<p>Define a function <em>bernoulli_shift_map()</em></p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">blog_code</span>
+<span class="kn">from</span> <span class="nn">blog_code</span> <span class="kn">import</span> <span class="n">systems</span>
+<span class="kn">from</span> <span class="nn">blog_code</span> <span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">blog_code.helpers</span> <span class="kn">import</span> <span class="n">latex</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">bernoulli_shift_map</span><span class="p">(</span><span class="n">systems</span><span class="o">.</span><span class="n">system</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">piecewise</span><span class="p">(</span><span class="n">x</span><span class="p">,[(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">&lt;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)],</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Bernoulli Shift Map </span><span class="se">\n</span><span class="s2"> $ D(x)=&quot;</span> <span class="o">+</span> <span class="n">latex</span><span class="o">.</span><span class="n">piecewise_function</span><span class="p">([</span>
+            <span class="s2">&quot;2x &amp; 0 </span><span class="se">\\</span><span class="s2">leq x &lt; 1/2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2x-1 &amp; 1/2 </span><span class="se">\\</span><span class="s2">leq x &lt; 1&quot;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;$ &quot;</span>
+
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">parameter_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+<span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">D</span> <span class="o">=</span> <span class="n">bernoulli_shift_map</span><span class="p">()</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">iteration_plot</span><span class="p">(</span><span class="n">systems</span><span class="o">.</span><span class="n">iterate</span><span class="p">(</span><span class="n">D</span><span class="p">)(</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>
+</pre></div>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157278336-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+</body>
+</html>
